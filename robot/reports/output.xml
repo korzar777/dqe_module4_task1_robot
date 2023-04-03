@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0.2 (Python 3.10.6 on win32)" generated="20230403 19:48:34.217" rpa="false" schemaversion="3">
+<suite id="s1" name="Tests" source="D:\EPAM\automation\training\dqe_module4_task1_robot\robot\tests">
+<suite id="s1-s1" name="Trn Db Hr Employees Tests" source="D:\EPAM\automation\training\dqe_module4_task1_robot\robot\tests\trn_db_hr_employees_tests.robot">
+<test id="s1-s1-t1" name="Table hr.employees has no duplicates as expected" line="12">
+<kw name="Evaluate this sql" library="common_keywords" type="SETUP">
+<arg>"${TABLE_CHECKS_SQL_GROUP1}".format('employee_id,count(*)', '${TRN_DB}','${TRN_TABLE_EMPLOYEES}','employee_id','count(*)&gt;1')</arg>
+<kw name="Evaluate" library="BuiltIn">
+<var>${value}</var>
+<arg>${txtquery}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20230403 19:48:35.281" level="INFO">${value} = SELECT employee_id,count(*) FROM TRN.hr.employees group by employee_id having count(*)&gt;1;</msg>
+<status status="PASS" starttime="20230403 19:48:35.280" endtime="20230403 19:48:35.283"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20230403 19:48:35.285" level="INFO">${EVALUATEDQUERY} = SELECT employee_id,count(*) FROM TRN.hr.employees group by employee_id having count(*)&gt;1;</msg>
+<status status="PASS" starttime="20230403 19:48:35.284" endtime="20230403 19:48:35.285"/>
+</kw>
+<status status="PASS" starttime="20230403 19:48:35.279" endtime="20230403 19:48:35.286"/>
+</kw>
+<kw name="Verify suit cases">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>0</arg>
+<arg>duplicate</arg>
+<doc>| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is expected (see case requiremnt)
+| 2. Each returned records (Failed) must be logged</doc>
+<kw name="Select DQ results for the table" library="common_keywords">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<doc>Query results from local database.</doc>
+<kw name="Execute Sql" library="DbLib">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<msg timestamp="20230403 19:48:35.546" level="INFO">${DQ_RESULTS} = Empty DataFrame
+Columns: []
+Index: []</msg>
+<status status="PASS" starttime="20230403 19:48:35.287" endtime="20230403 19:48:35.546"/>
+</kw>
+<msg timestamp="20230403 19:48:35.547" level="INFO">${DQ_RESULTS} = Empty DataFrame
+Columns: []
+Index: []</msg>
+<status status="PASS" starttime="20230403 19:48:35.287" endtime="20230403 19:48:35.547"/>
+</kw>
+<kw name="Number of rows is correct" library="common_keywords">
+<var>${passed}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${DQ_RESULTS}</arg>
+<arg>${EXPVALUE}</arg>
+<kw name="Check Number Of Rows" library="PandasLibs">
+<var>${boolresult}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${tabledata}</arg>
+<arg>${expectedrowcount}</arg>
+<msg timestamp="20230403 19:48:35.549" level="INFO">${boolresult} = True</msg>
+<msg timestamp="20230403 19:48:35.549" level="INFO">${rownum} = 0</msg>
+<msg timestamp="20230403 19:48:35.549" level="INFO">${rows} = None</msg>
+<status status="PASS" starttime="20230403 19:48:35.548" endtime="20230403 19:48:35.549"/>
+</kw>
+<msg timestamp="20230403 19:48:35.549" level="INFO">${passed} = True</msg>
+<msg timestamp="20230403 19:48:35.550" level="INFO">${rownum} = 0</msg>
+<msg timestamp="20230403 19:48:35.550" level="INFO">${rows} = None</msg>
+<status status="PASS" starttime="20230403 19:48:35.548" endtime="20230403 19:48:35.550"/>
+</kw>
+<if>
+<branch type="IF" condition="not ${passed}">
+<kw name="Log" library="BuiltIn">
+<arg>FAILED RESPONSE DATA\r\n+${rows}</arg>
+<arg>ERROR</arg>
+<arg>${False}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20230403 19:48:35.550" endtime="20230403 19:48:35.551"/>
+</kw>
+<kw name="Fail" library="BuiltIn">
+<arg>hr.employees has ${rownum} ${DESCR}. All can be found in log</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20230403 19:48:35.551" endtime="20230403 19:48:35.551"/>
+</kw>
+<status status="NOT RUN" starttime="20230403 19:48:35.550" endtime="20230403 19:48:35.551"/>
+</branch>
+<status status="PASS" starttime="20230403 19:48:35.550" endtime="20230403 19:48:35.551"/>
+</if>
+<status status="PASS" starttime="20230403 19:48:35.286" endtime="20230403 19:48:35.551"/>
+</kw>
+<doc>| *Case verifies that no duplicate rows exist in hr.employees table*
+| *Setup:*
+| 0. In testcase prepare query based on predefined sample (based on testcase) by setting input values to it
+| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is 0
+| 2. Each returned records (Failed) must be logged</doc>
+<tag>employees</tag>
+<tag>TC#1</tag>
+<tag>trn</tag>
+<status status="PASS" starttime="20230403 19:48:35.276" endtime="20230403 19:48:35.552"/>
+</test>
+<test id="s1-s1-t2" name="Salary is positive for all employees in hr.employees as expected" line="27">
+<kw name="Evaluate this sql" library="common_keywords" type="SETUP">
+<arg>"${TABLE_CHECKS_SQL_SELECT1}".format('*', '${TRN_DB}','${TRN_TABLE_EMPLOYEES}','salary &lt;= 0')</arg>
+<kw name="Evaluate" library="BuiltIn">
+<var>${value}</var>
+<arg>${txtquery}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20230403 19:48:35.555" level="INFO">${value} = SELECT * FROM TRN.hr.employees where salary &lt;= 0;</msg>
+<status status="PASS" starttime="20230403 19:48:35.555" endtime="20230403 19:48:35.555"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20230403 19:48:35.557" level="INFO">${EVALUATEDQUERY} = SELECT * FROM TRN.hr.employees where salary &lt;= 0;</msg>
+<status status="PASS" starttime="20230403 19:48:35.556" endtime="20230403 19:48:35.557"/>
+</kw>
+<status status="PASS" starttime="20230403 19:48:35.554" endtime="20230403 19:48:35.557"/>
+</kw>
+<kw name="Verify suit cases">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>0</arg>
+<arg>rows with non-positive salary</arg>
+<doc>| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is expected (see case requiremnt)
+| 2. Each returned records (Failed) must be logged</doc>
+<kw name="Select DQ results for the table" library="common_keywords">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<doc>Query results from local database.</doc>
+<kw name="Execute Sql" library="DbLib">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<msg timestamp="20230403 19:48:35.594" level="INFO">${DQ_RESULTS} =    employee_id first_name last_name  ... salary manager_id department_id
+0          207       Mary     Lough  ...   0.00        205            11
+1          208        Jan    Claude  ...   0.00       ...</msg>
+<status status="PASS" starttime="20230403 19:48:35.559" endtime="20230403 19:48:35.594"/>
+</kw>
+<msg timestamp="20230403 19:48:35.605" level="INFO">${DQ_RESULTS} =    employee_id first_name last_name  ... salary manager_id department_id
+0          207       Mary     Lough  ...   0.00        205            11
+1          208        Jan    Claude  ...   0.00       ...</msg>
+<status status="PASS" starttime="20230403 19:48:35.558" endtime="20230403 19:48:35.605"/>
+</kw>
+<kw name="Number of rows is correct" library="common_keywords">
+<var>${passed}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${DQ_RESULTS}</arg>
+<arg>${EXPVALUE}</arg>
+<kw name="Check Number Of Rows" library="PandasLibs">
+<var>${boolresult}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${tabledata}</arg>
+<arg>${expectedrowcount}</arg>
+<msg timestamp="20230403 19:48:35.606" level="INFO">${boolresult} = False</msg>
+<msg timestamp="20230403 19:48:35.606" level="INFO">${rownum} = 3</msg>
+<msg timestamp="20230403 19:48:35.618" level="INFO">${rows} =    employee_id first_name last_name  ... salary manager_id department_id
+0          207       Mary     Lough  ...   0.00        205            11
+1          208        Jan    Claude  ...   0.00       ...</msg>
+<status status="PASS" starttime="20230403 19:48:35.606" endtime="20230403 19:48:35.618"/>
+</kw>
+<msg timestamp="20230403 19:48:35.618" level="INFO">${passed} = False</msg>
+<msg timestamp="20230403 19:48:35.618" level="INFO">${rownum} = 3</msg>
+<msg timestamp="20230403 19:48:35.629" level="INFO">${rows} =    employee_id first_name last_name  ... salary manager_id department_id
+0          207       Mary     Lough  ...   0.00        205            11
+1          208        Jan    Claude  ...   0.00       ...</msg>
+<status status="PASS" starttime="20230403 19:48:35.605" endtime="20230403 19:48:35.629"/>
+</kw>
+<if>
+<branch type="IF" condition="not ${passed}">
+<kw name="Log" library="BuiltIn">
+<arg>FAILED RESPONSE DATA\r\n+${rows}</arg>
+<arg>ERROR</arg>
+<arg>${False}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20230403 19:48:35.640" level="ERROR">FAILED RESPONSE DATA
++   employee_id first_name last_name  ... salary manager_id department_id
+0          207       Mary     Lough  ...   0.00        205            11
+1          208        Jan    Claude  ...   0.00        205            11
+2          209       Jan     Claude  ...   0.00        205            11
+
+[3 rows x 10 columns]</msg>
+<status status="PASS" starttime="20230403 19:48:35.629" endtime="20230403 19:48:35.640"/>
+</kw>
+<kw name="Fail" library="BuiltIn">
+<arg>hr.employees has ${rownum} ${DESCR}. All can be found in log</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<msg timestamp="20230403 19:48:35.642" level="FAIL">hr.employees has 3 rows with non-positive salary. All can be found in log</msg>
+<status status="FAIL" starttime="20230403 19:48:35.641" endtime="20230403 19:48:35.642"/>
+</kw>
+<status status="FAIL" starttime="20230403 19:48:35.629" endtime="20230403 19:48:35.642"/>
+</branch>
+<status status="FAIL" starttime="20230403 19:48:35.629" endtime="20230403 19:48:35.642"/>
+</if>
+<status status="FAIL" starttime="20230403 19:48:35.558" endtime="20230403 19:48:35.642"/>
+</kw>
+<doc>| *Case verifies that salary in hr.employees table is positive (&gt;0) for all records*
+| *Setup:*
+| 0. In testcase prepare query based on predefined sample (based on testcase) by setting input values to it
+| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is &lt;=0
+| 2. Each returned records (Failed) must be logged</doc>
+<tag>employees</tag>
+<tag>TC#2</tag>
+<tag>trn</tag>
+<status status="FAIL" starttime="20230403 19:48:35.552" endtime="20230403 19:48:35.643">hr.employees has 3 rows with non-positive salary. All can be found in log</status>
+</test>
+<doc>Contains DQE tests for the TRN DB , table hr.employees</doc>
+<status status="FAIL" starttime="20230403 19:48:34.257" endtime="20230403 19:48:35.644"/>
+</suite>
+<suite id="s1-s2" name="Trn Db Hr Jobs Tests" source="D:\EPAM\automation\training\dqe_module4_task1_robot\robot\tests\trn_db_hr_jobs_tests.robot">
+<test id="s1-s2-t1" name="Jobs table Min Salary is less or equal to Max Salary as expected" line="10">
+<kw name="Evaluate this sql" library="common_keywords" type="SETUP">
+<arg>"${TABLE_CHECKS_SQL_SELECT1}".format('*', '${TRN_DB}','${TRN_TABLE_JOBS}','min_salary is not null and max_salary is not null and min_salary &gt; max_salary')</arg>
+<kw name="Evaluate" library="BuiltIn">
+<var>${value}</var>
+<arg>${txtquery}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20230403 19:48:35.670" level="INFO">${value} = SELECT * FROM TRN.hr.jobs where min_salary is not null and max_salary is not null and min_salary &gt; max_salary;</msg>
+<status status="PASS" starttime="20230403 19:48:35.669" endtime="20230403 19:48:35.670"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20230403 19:48:35.671" level="INFO">${EVALUATEDQUERY} = SELECT * FROM TRN.hr.jobs where min_salary is not null and max_salary is not null and min_salary &gt; max_salary;</msg>
+<status status="PASS" starttime="20230403 19:48:35.670" endtime="20230403 19:48:35.672"/>
+</kw>
+<status status="PASS" starttime="20230403 19:48:35.669" endtime="20230403 19:48:35.672"/>
+</kw>
+<kw name="Select DQ results for the table" library="common_keywords">
+<var>${DQ_RESULTS}</var>
+<arg>${EVALUATEDQUERY}</arg>
+<doc>Query results from local database.</doc>
+<kw name="Execute Sql" library="DbLib">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<msg timestamp="20230403 19:48:35.683" level="INFO">${DQ_RESULTS} = Empty DataFrame
+Columns: []
+Index: []</msg>
+<status status="PASS" starttime="20230403 19:48:35.672" endtime="20230403 19:48:35.683"/>
+</kw>
+<msg timestamp="20230403 19:48:35.684" level="INFO">${DQ_RESULTS} = Empty DataFrame
+Columns: []
+Index: []</msg>
+<status status="PASS" starttime="20230403 19:48:35.672" endtime="20230403 19:48:35.684"/>
+</kw>
+<kw name="Number of rows is correct" library="common_keywords">
+<var>${passed}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${DQ_RESULTS}</arg>
+<arg>0</arg>
+<kw name="Check Number Of Rows" library="PandasLibs">
+<var>${boolresult}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${tabledata}</arg>
+<arg>${expectedrowcount}</arg>
+<msg timestamp="20230403 19:48:35.686" level="INFO">${boolresult} = True</msg>
+<msg timestamp="20230403 19:48:35.686" level="INFO">${rownum} = 0</msg>
+<msg timestamp="20230403 19:48:35.686" level="INFO">${rows} = None</msg>
+<status status="PASS" starttime="20230403 19:48:35.685" endtime="20230403 19:48:35.686"/>
+</kw>
+<msg timestamp="20230403 19:48:35.687" level="INFO">${passed} = True</msg>
+<msg timestamp="20230403 19:48:35.687" level="INFO">${rownum} = 0</msg>
+<msg timestamp="20230403 19:48:35.687" level="INFO">${rows} = None</msg>
+<status status="PASS" starttime="20230403 19:48:35.684" endtime="20230403 19:48:35.687"/>
+</kw>
+<if>
+<branch type="IF" condition="not ${passed}">
+<kw name="Log" library="BuiltIn">
+<arg>FAILED RESPONSE DATA\r\n+${rows}</arg>
+<arg>ERROR</arg>
+<arg>0</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20230403 19:48:35.688" endtime="20230403 19:48:35.688"/>
+</kw>
+<kw name="Fail" library="BuiltIn">
+<arg>hr.employees has ${rownum} rows having min_salary &gt; max_salary. All can be found in log</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20230403 19:48:35.688" endtime="20230403 19:48:35.688"/>
+</kw>
+<status status="NOT RUN" starttime="20230403 19:48:35.687" endtime="20230403 19:48:35.688"/>
+</branch>
+<status status="PASS" starttime="20230403 19:48:35.687" endtime="20230403 19:48:35.689"/>
+</if>
+<doc>| *Case verifies that min_salary in hr.jobs table is less or equal to max_salary for all records*
+| *Setup:*
+| 0. Prepare query based on predefined sample (based on testcase) by setting input values to it
+| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is expected (see case requiremnt)
+| 2. Each returned records (Failed) must be logged</doc>
+<tag>jobs</tag>
+<tag>TC#3</tag>
+<tag>trn</tag>
+<status status="PASS" starttime="20230403 19:48:35.665" endtime="20230403 19:48:35.690"/>
+</test>
+<test id="s1-s2-t2" name="Jobs table has expected job_id+job_title pairs" line="31">
+<kw name="Evaluate this sql" library="common_keywords" type="SETUP">
+<arg>"${TABLE_CHECKS_SQL_SELECT0}".format('job_id,job_title', '${TRN_DB}','${TRN_TABLE_JOBS}')</arg>
+<kw name="Evaluate" library="BuiltIn">
+<var>${value}</var>
+<arg>${txtquery}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20230403 19:48:35.696" level="INFO">${value} = SELECT job_id,job_title FROM TRN.hr.jobs;</msg>
+<status status="PASS" starttime="20230403 19:48:35.695" endtime="20230403 19:48:35.696"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20230403 19:48:35.699" level="INFO">${EVALUATEDQUERY} = SELECT job_id,job_title FROM TRN.hr.jobs;</msg>
+<status status="PASS" starttime="20230403 19:48:35.697" endtime="20230403 19:48:35.699"/>
+</kw>
+<status status="PASS" starttime="20230403 19:48:35.694" endtime="20230403 19:48:35.699"/>
+</kw>
+<kw name="Select DQ results for the table" library="common_keywords">
+<var>${DQ_RESULTS}</var>
+<arg>${EVALUATEDQUERY}</arg>
+<doc>Query results from local database.</doc>
+<kw name="Execute Sql" library="DbLib">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<msg timestamp="20230403 19:48:35.713" level="INFO">${DQ_RESULTS} =     job_id                        job_title
+0        1                Public Accountant
+1        2               Accounting Manager
+2        3         Administration Assistant
+3        4              ...</msg>
+<status status="PASS" starttime="20230403 19:48:35.700" endtime="20230403 19:48:35.713"/>
+</kw>
+<msg timestamp="20230403 19:48:35.718" level="INFO">${DQ_RESULTS} =     job_id                        job_title
+0        1                Public Accountant
+1        2               Accounting Manager
+2        3         Administration Assistant
+3        4              ...</msg>
+<status status="PASS" starttime="20230403 19:48:35.699" endtime="20230403 19:48:35.718"/>
+</kw>
+<kw name="Get py variable" library="common_keywords">
+<var>${JOBTITLEXPECTEDEDICT}</var>
+<kw name="Jobid Jobtitle Pairs" library="extended_variables">
+<var>${value}</var>
+<msg timestamp="20230403 19:48:35.719" level="INFO">${value} = {1: 'Public Accountant', 2: 'Accounting Manager', 3: 'Administration Assistant', 4: 'President', 5: 'Administration Vice President', 6: 'Accountant', 7: 'Finance Manager', 8: 'Human Resources Represen...</msg>
+<status status="PASS" starttime="20230403 19:48:35.718" endtime="20230403 19:48:35.719"/>
+</kw>
+<msg timestamp="20230403 19:48:35.719" level="INFO">${JOBTITLEXPECTEDEDICT} = {1: 'Public Accountant', 2: 'Accounting Manager', 3: 'Administration Assistant', 4: 'President', 5: 'Administration Vice President', 6: 'Accountant', 7: 'Finance Manager', 8: 'Human Resources Represen...</msg>
+<status status="PASS" starttime="20230403 19:48:35.718" endtime="20230403 19:48:35.719"/>
+</kw>
+<kw name="Check All Records Correspond Dictionary" library="PandasLibs">
+<var>${passed}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${DQ_RESULTS}</arg>
+<arg>${JOBTITLEXPECTEDEDICT}</arg>
+<msg timestamp="20230403 19:48:35.721" level="INFO">${passed} = True</msg>
+<msg timestamp="20230403 19:48:35.722" level="INFO">${rownum} = 0</msg>
+<msg timestamp="20230403 19:48:35.722" level="INFO">${rows} = None</msg>
+<status status="PASS" starttime="20230403 19:48:35.720" endtime="20230403 19:48:35.722"/>
+</kw>
+<if>
+<branch type="IF" condition="not ${passed}">
+<kw name="Log" library="BuiltIn">
+<arg>FAILED RESPONSE DATA\r\n+${rows}</arg>
+<arg>ERROR</arg>
+<arg>${False}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20230403 19:48:35.723" endtime="20230403 19:48:35.723"/>
+</kw>
+<kw name="Fail" library="BuiltIn">
+<arg>Jobs table has ${rownum} unexpected job_id+job_title pairs. All can be found in log</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20230403 19:48:35.724" endtime="20230403 19:48:35.724"/>
+</kw>
+<status status="NOT RUN" starttime="20230403 19:48:35.722" endtime="20230403 19:48:35.724"/>
+</branch>
+<status status="PASS" starttime="20230403 19:48:35.722" endtime="20230403 19:48:35.725"/>
+</if>
+<doc>| *Case verifies that all combinations job_id+job_title in Jobs table ahve predefned values*
+| *Setup:*
+| 0. Prepare query based on predefined sample (based on testcase) by setting input values to it
+| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is expected (see case requiremnt)
+| 2. Each returned records (Failed) must be logged</doc>
+<tag>jobs</tag>
+<tag>TC#1</tag>
+<tag>trn</tag>
+<status status="PASS" starttime="20230403 19:48:35.690" endtime="20230403 19:48:35.725"/>
+</test>
+<doc>Contains DQE tests for the TRN DB , table hr.employees</doc>
+<status status="PASS" starttime="20230403 19:48:35.646" endtime="20230403 19:48:35.726"/>
+</suite>
+<suite id="s1-s3" name="Trn Db Hr Locations Tests" source="D:\EPAM\automation\training\dqe_module4_task1_robot\robot\tests\trn_db_hr_locations_tests.robot">
+<test id="s1-s3-t1" name="Table coutryid has correct formatting" line="10">
+<kw name="Evaluate this sql" library="common_keywords" type="SETUP">
+<arg>"${TABLE_CHECKS_SQL_SELECT1}".format('TRIM(country_id)', '${TRN_DB}','${TRN_TABLE_LOCATIONS}','len(TRIM(country_id))!=2 or upper(country_id) != country_id COLLATE Latin1_General_BIN2')</arg>
+<kw name="Evaluate" library="BuiltIn">
+<var>${value}</var>
+<arg>${txtquery}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20230403 19:48:35.745" level="INFO">${value} = SELECT TRIM(country_id) FROM TRN.hr.locations where len(TRIM(country_id))!=2 or upper(country_id) != country_id COLLATE Latin1_General_BIN2;</msg>
+<status status="PASS" starttime="20230403 19:48:35.744" endtime="20230403 19:48:35.745"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20230403 19:48:35.746" level="INFO">${EVALUATEDQUERY} = SELECT TRIM(country_id) FROM TRN.hr.locations where len(TRIM(country_id))!=2 or upper(country_id) != country_id COLLATE Latin1_General_BIN2;</msg>
+<status status="PASS" starttime="20230403 19:48:35.745" endtime="20230403 19:48:35.746"/>
+</kw>
+<status status="PASS" starttime="20230403 19:48:35.743" endtime="20230403 19:48:35.747"/>
+</kw>
+<kw name="Verify suit cases">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>0</arg>
+<arg>coutryids with bad formatting</arg>
+<doc>| *Setup:*
+| 0. In testcase prepare query based on predefined sample (based on testcase) by setting input values to it
+| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is expected (see case requiremnt)
+| 2. Each returned records (Failed) must be logged</doc>
+<kw name="Select DQ results for the table" library="common_keywords">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<doc>Query results from local database.</doc>
+<kw name="Execute Sql" library="DbLib">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<msg timestamp="20230403 19:48:35.760" level="INFO">${DQ_RESULTS} = Empty DataFrame
+Columns: []
+Index: []</msg>
+<status status="PASS" starttime="20230403 19:48:35.749" endtime="20230403 19:48:35.760"/>
+</kw>
+<msg timestamp="20230403 19:48:35.761" level="INFO">${DQ_RESULTS} = Empty DataFrame
+Columns: []
+Index: []</msg>
+<status status="PASS" starttime="20230403 19:48:35.747" endtime="20230403 19:48:35.761"/>
+</kw>
+<kw name="Number of rows is correct" library="common_keywords">
+<var>${passed}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${DQ_RESULTS}</arg>
+<arg>${EXPVALUE}</arg>
+<kw name="Check Number Of Rows" library="PandasLibs">
+<var>${boolresult}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${tabledata}</arg>
+<arg>${expectedrowcount}</arg>
+<msg timestamp="20230403 19:48:35.764" level="INFO">${boolresult} = True</msg>
+<msg timestamp="20230403 19:48:35.764" level="INFO">${rownum} = 0</msg>
+<msg timestamp="20230403 19:48:35.764" level="INFO">${rows} = None</msg>
+<status status="PASS" starttime="20230403 19:48:35.763" endtime="20230403 19:48:35.764"/>
+</kw>
+<msg timestamp="20230403 19:48:35.765" level="INFO">${passed} = True</msg>
+<msg timestamp="20230403 19:48:35.765" level="INFO">${rownum} = 0</msg>
+<msg timestamp="20230403 19:48:35.765" level="INFO">${rows} = None</msg>
+<status status="PASS" starttime="20230403 19:48:35.762" endtime="20230403 19:48:35.765"/>
+</kw>
+<if>
+<branch type="IF" condition="not ${passed}">
+<kw name="Log" library="BuiltIn">
+<arg>FAILED RESPONSE DATA\r\n+${rows}</arg>
+<arg>ERROR</arg>
+<arg>${False}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20230403 19:48:35.766" endtime="20230403 19:48:35.767"/>
+</kw>
+<kw name="Fail" library="BuiltIn">
+<arg>hr.locations has ${rownum} ${DESCR}. All can be found in log</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20230403 19:48:35.767" endtime="20230403 19:48:35.767"/>
+</kw>
+<status status="NOT RUN" starttime="20230403 19:48:35.766" endtime="20230403 19:48:35.768"/>
+</branch>
+<status status="PASS" starttime="20230403 19:48:35.766" endtime="20230403 19:48:35.768"/>
+</if>
+<status status="PASS" starttime="20230403 19:48:35.747" endtime="20230403 19:48:35.768"/>
+</kw>
+<doc>| *Case verifies that coutryid has correct formatting
+| *Checking: ID length is 2 symbols and uppercase *
+| *Setup:*
+| 0. In testcase prepare query based on predefined sample (based on testcase) by setting input values to it
+| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is =0
+| 2. Each returned records (Failed) must be logged</doc>
+<tag>locations</tag>
+<tag>TC#5</tag>
+<tag>trn</tag>
+<status status="PASS" starttime="20230403 19:48:35.742" endtime="20230403 19:48:35.768"/>
+</test>
+<test id="s1-s3-t2" name="Adress length is less than column size as expected" line="26">
+<kw name="Evaluate this sql" library="common_keywords" type="SETUP">
+<arg>"${TABLE_CHECKS_SQL_SELECT1}".format('location_id,street_address', '${TRN_DB}','${TRN_TABLE_LOCATIONS}','len([street_address])&gt;=40')</arg>
+<kw name="Evaluate" library="BuiltIn">
+<var>${value}</var>
+<arg>${txtquery}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20230403 19:48:35.773" level="INFO">${value} = SELECT location_id,street_address FROM TRN.hr.locations where len([street_address])&gt;=40;</msg>
+<status status="PASS" starttime="20230403 19:48:35.772" endtime="20230403 19:48:35.775"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20230403 19:48:35.776" level="INFO">${EVALUATEDQUERY} = SELECT location_id,street_address FROM TRN.hr.locations where len([street_address])&gt;=40;</msg>
+<status status="PASS" starttime="20230403 19:48:35.775" endtime="20230403 19:48:35.776"/>
+</kw>
+<status status="PASS" starttime="20230403 19:48:35.771" endtime="20230403 19:48:35.777"/>
+</kw>
+<kw name="Verify suit cases">
+<arg>${EVALUATEDQUERY}</arg>
+<arg>0</arg>
+<arg>rows with max allowed length of address</arg>
+<doc>| *Setup:*
+| 0. In testcase prepare query based on predefined sample (based on testcase) by setting input values to it
+| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is expected (see case requiremnt)
+| 2. Each returned records (Failed) must be logged</doc>
+<kw name="Select DQ results for the table" library="common_keywords">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<doc>Query results from local database.</doc>
+<kw name="Execute Sql" library="DbLib">
+<var>${DQ_RESULTS}</var>
+<arg>${QUERY}</arg>
+<msg timestamp="20230403 19:48:35.794" level="INFO">${DQ_RESULTS} =    location_id                            street_address
+0         2500  Magdalen Centre, The Oxford Science Park</msg>
+<status status="PASS" starttime="20230403 19:48:35.778" endtime="20230403 19:48:35.794"/>
+</kw>
+<msg timestamp="20230403 19:48:35.798" level="INFO">${DQ_RESULTS} =    location_id                            street_address
+0         2500  Magdalen Centre, The Oxford Science Park</msg>
+<status status="PASS" starttime="20230403 19:48:35.778" endtime="20230403 19:48:35.799"/>
+</kw>
+<kw name="Number of rows is correct" library="common_keywords">
+<var>${passed}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${DQ_RESULTS}</arg>
+<arg>${EXPVALUE}</arg>
+<kw name="Check Number Of Rows" library="PandasLibs">
+<var>${boolresult}</var>
+<var>${rownum}</var>
+<var>${rows}</var>
+<arg>${tabledata}</arg>
+<arg>${expectedrowcount}</arg>
+<msg timestamp="20230403 19:48:35.800" level="INFO">${boolresult} = False</msg>
+<msg timestamp="20230403 19:48:35.800" level="INFO">${rownum} = 1</msg>
+<msg timestamp="20230403 19:48:35.806" level="INFO">${rows} =    location_id                            street_address
+0         2500  Magdalen Centre, The Oxford Science Park</msg>
+<status status="PASS" starttime="20230403 19:48:35.800" endtime="20230403 19:48:35.806"/>
+</kw>
+<msg timestamp="20230403 19:48:35.806" level="INFO">${passed} = False</msg>
+<msg timestamp="20230403 19:48:35.807" level="INFO">${rownum} = 1</msg>
+<msg timestamp="20230403 19:48:35.812" level="INFO">${rows} =    location_id                            street_address
+0         2500  Magdalen Centre, The Oxford Science Park</msg>
+<status status="PASS" starttime="20230403 19:48:35.799" endtime="20230403 19:48:35.813"/>
+</kw>
+<if>
+<branch type="IF" condition="not ${passed}">
+<kw name="Log" library="BuiltIn">
+<arg>FAILED RESPONSE DATA\r\n+${rows}</arg>
+<arg>ERROR</arg>
+<arg>${False}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20230403 19:48:35.818" level="ERROR">FAILED RESPONSE DATA
++   location_id                            street_address
+0         2500  Magdalen Centre, The Oxford Science Park</msg>
+<status status="PASS" starttime="20230403 19:48:35.814" endtime="20230403 19:48:35.819"/>
+</kw>
+<kw name="Fail" library="BuiltIn">
+<arg>hr.locations has ${rownum} ${DESCR}. All can be found in log</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<msg timestamp="20230403 19:48:35.820" level="FAIL">hr.locations has 1 rows with max allowed length of address. All can be found in log</msg>
+<status status="FAIL" starttime="20230403 19:48:35.819" endtime="20230403 19:48:35.820"/>
+</kw>
+<status status="FAIL" starttime="20230403 19:48:35.813" endtime="20230403 19:48:35.821"/>
+</branch>
+<status status="FAIL" starttime="20230403 19:48:35.813" endtime="20230403 19:48:35.821"/>
+</if>
+<status status="FAIL" starttime="20230403 19:48:35.777" endtime="20230403 19:48:35.821"/>
+</kw>
+<doc>| *Case verifies that length of text in address column in hr.locations table is less than size of column*
+| *Potentially this case can be issue*
+| *Treated as Failed if address length is the same as column length*
+| *Setup:*
+| 0. In testcase prepare query based on predefined sample (based on testcase) by setting input values to it
+| *Test Steps:*
+| 1. Execute prepared query and migrate to pandas DataFrame
+| 2. Check number of rows returned is correct
+| *Expected result:*
+| 1. Number of records returned by query is 0
+| 2. Each returned records (Failed) must be logged</doc>
+<tag>locations</tag>
+<tag>TC#6</tag>
+<tag>trn</tag>
+<status status="FAIL" starttime="20230403 19:48:35.769" endtime="20230403 19:48:35.821">hr.locations has 1 rows with max allowed length of address. All can be found in log</status>
+</test>
+<doc>Contains DQE tests for the TRN DB , table hr.employees</doc>
+<status status="FAIL" starttime="20230403 19:48:35.728" endtime="20230403 19:48:35.823"/>
+</suite>
+<status status="FAIL" starttime="20230403 19:48:34.221" endtime="20230403 19:48:35.825"/>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="2" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="1" skip="0">employees</stat>
+<stat pass="2" fail="0" skip="0">jobs</stat>
+<stat pass="1" fail="1" skip="0">locations</stat>
+<stat pass="2" fail="0" skip="0">TC#1</stat>
+<stat pass="0" fail="1" skip="0">TC#2</stat>
+<stat pass="1" fail="0" skip="0">TC#3</stat>
+<stat pass="1" fail="0" skip="0">TC#5</stat>
+<stat pass="0" fail="1" skip="0">TC#6</stat>
+<stat pass="4" fail="2" skip="0">trn</stat>
+</tag>
+<suite>
+<stat pass="4" fail="2" skip="0" id="s1" name="Tests">Tests</stat>
+<stat pass="1" fail="1" skip="0" id="s1-s1" name="Trn Db Hr Employees Tests">Tests.Trn Db Hr Employees Tests</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s2" name="Trn Db Hr Jobs Tests">Tests.Trn Db Hr Jobs Tests</stat>
+<stat pass="1" fail="1" skip="0" id="s1-s3" name="Trn Db Hr Locations Tests">Tests.Trn Db Hr Locations Tests</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20230403 19:48:35.640" level="ERROR">FAILED RESPONSE DATA
++   employee_id first_name last_name  ... salary manager_id department_id
+0          207       Mary     Lough  ...   0.00        205            11
+1          208        Jan    Claude  ...   0.00        205            11
+2          209       Jan     Claude  ...   0.00        205            11
+
+[3 rows x 10 columns]</msg>
+<msg timestamp="20230403 19:48:35.663" level="ERROR">Error in file 'D:\EPAM\automation\training\dqe_module4_task1_robot\robot\tests\trn_db_hr_jobs_tests.robot' on line 5: Invalid resource file extension '.py'. Supported extensions are '.resource', '.robot', '.txt', '.tsv', '.rst' and '.rest'.</msg>
+<msg timestamp="20230403 19:48:35.818" level="ERROR">FAILED RESPONSE DATA
++   location_id                            street_address
+0         2500  Magdalen Centre, The Oxford Science Park</msg>
+</errors>
+</robot>
