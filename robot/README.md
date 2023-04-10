@@ -1,11 +1,11 @@
 # Environment setup
 
 ## Create virtual environment for tests execution
-```bash
+```cmd
 cd robot
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-cd resources/libraries && python setup.py install
+python3 -m venv venv 
+venv\Scripts\activate
+pip install -r robot/requirements.txt
 ```
 
 ## Deploy and configure Data Quality solution
@@ -13,7 +13,10 @@ Follow [instructions](README.md)
 
 ## Run robot tests
 ```bash
-robot /robot/tests/
+robot robot/tests/  ##to run all tests in etsts folder
+robot robot/tests/ --include employees   ## to run test with tag employees
+robot robot/tests/ --include TC#5   ## to run test with tag employees
+robot  robot/tests/trn_db_hr_jobs_tests.robot  ##run cases in specified file
 ```
 
 # Report portal integration with Robot Framework

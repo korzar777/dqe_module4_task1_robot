@@ -1,6 +1,5 @@
 *** Settings ***
 Resource  variables.resource
-Library   DatabaseLibrary
 Library   PandasLibs.py
 Library   DbLib.py
 Library   extended_variables.py

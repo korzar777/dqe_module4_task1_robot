@@ -2,7 +2,7 @@
 Documentation  Contains DQE tests for the TRN DB , table hr.employees
 Resource       ../resources/variables.resource
 Resource       ../resources/common_keywords.resource
-Resource       ../resources/extended_variables.py
+Library       ../resources/extended_variables.py
 Force Tags     trn  jobs
 
 

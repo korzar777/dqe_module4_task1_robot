@@ -14,3 +14,4 @@ reportportal-client==5.0.12
 awscli==1.19.111
 pandas==1.5.3
 pyodbc~=4.0.35
+SQLAlchemy~=2.0.7

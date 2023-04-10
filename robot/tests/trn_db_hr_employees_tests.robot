@@ -3,8 +3,6 @@ Documentation  Contains DQE tests for the TRN DB , table hr.employees
 Resource       ../resources/variables.resource
 Resource       ../resources/common_keywords.resource
 Force Tags     trn  employees
-#Suite Setup    Connect To Local Database  ${TRN_DB}
-#Suite Teardown    Disconnect From Database
 Test Template   Verify suit cases
 
 
