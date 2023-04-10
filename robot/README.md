@@ -2,7 +2,6 @@
 
 ## Create virtual environment for tests execution
 ```cmd
-cd robot
 python3 -m venv venv 
 venv\Scripts\activate
 pip install -r robot/requirements.txt
