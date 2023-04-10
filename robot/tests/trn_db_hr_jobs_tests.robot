@@ -29,7 +29,7 @@ Jobs table Min Salary is less or equal to Max Salary as expected
     END
 
 Jobs table has expected job_id+job_title pairs
-    [Tags]   TC#1
+    [Tags]   TC#4
     [Documentation]
     ...  | *Case verifies that all combinations job_id+job_title in Jobs table ahve predefned values*
     ...  | *Setup:*
